@@ -35,6 +35,14 @@ public class TableStructure {
         }
 
         public AdjacentNode getAdjacent(InetAddress ip){
+            Iterator table = adjacentTable.keySet().iterator();
+            while(table.hasNext()){
+                String name = table.next().toString();
+                AdjacentNode tempCompare = adjacentTable.get(name);
+                if(tempCompare.getIP().equals(ip.toString())){
+                    return tempCompare;
+                }
+            }
             return null;
         }
 
@@ -49,6 +57,7 @@ public class TableStructure {
             }
             return false;
         }
+
 
         public boolean containsAdjacent(String name){
             return adjacentTable.containsKey(name);
@@ -66,7 +75,7 @@ public class TableStructure {
             distanceVectorTable.remove(name);
         }
 
-        public void setRoute(String name, String gate, int cost){
+        public void setRoute(String name, InetAddress gate, int cost){
             ReachNode tempRoute = getRoute(name);
             AdjacentNode tempAdjacent = getAdjacent(gate);
             tempRoute.setGate(tempAdjacent);

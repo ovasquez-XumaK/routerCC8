@@ -62,11 +62,12 @@ public class DistanceVectorServer implements Runnable {
                                 int tempCost = Integer.parseInt(messagePartSplit[1]);
                                 if(tableOfStructure.containsRoute(tempName)){
                                     if(tableOfStructure.isFaster(tempName,tempCost)){
-                                        //Cambiar setRoute
+                                        tableOfStructure.setRoute(tempName,stablishConection.getInetAddress(),tempCost);
                                     }
                                 } else {
-                                    //Agregar metodo para obtener adyacente via IP
-
+                                    AdjacentNode tempAdjacent = tableOfStructure.getAdjacent(stablishConection.getInetAddress());
+                                    ReachNode tempReach = new ReachNode(tempName,tempCost,tempAdjacent);
+                                    tableOfStructure.addRoute(tempName,tempReach);
                                 }
                             }
                         } else {
