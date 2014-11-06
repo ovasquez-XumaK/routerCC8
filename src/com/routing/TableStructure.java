@@ -1,6 +1,7 @@
 package com.routing;
 
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -8,9 +9,7 @@ import java.util.Iterator;
  * Created by Jose on 02/11/2014.
  */
 
-// on String[] of distance vector
-// [0] = name of adjacent gate
-// [1] = cost to send
+
 public class TableStructure {
     public static String routerName = "Jose";
     private HashMap<String,ReachNode> distanceVectorTable = new HashMap<String, ReachNode>();
@@ -99,6 +98,10 @@ public class TableStructure {
 
         public boolean containsRoute(String name){
             return distanceVectorTable.containsKey(name);
+        }
+
+        public HashMap getTable(){
+            return distanceVectorTable;
         }
 
     //Finish distance vector methods
