@@ -66,8 +66,12 @@ public class TableStructure {
             distanceVectorTable.remove(name);
         }
 
-        public void setRoute(String name, ReachNode node){
-            distanceVectorTable.replace(name,node);
+        public void setRoute(String name, String gate, int cost){
+            ReachNode tempRoute = getRoute(name);
+            AdjacentNode tempAdjacent = getAdjacent(gate);
+            tempRoute.setGate(tempAdjacent);
+            tempRoute.setCost(cost);
+            distanceVectorTable.replace(name,tempRoute);
         }
 
         public ReachNode getRoute(String name){
