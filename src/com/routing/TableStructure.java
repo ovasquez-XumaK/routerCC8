@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 
 public class TableStructure {
-    public static String routerName = "Jose";
+    public static String routerName = "jose";
     private HashMap<String,ReachNode> distanceVectorTable = new HashMap<String, ReachNode>();
     private HashMap<String,AdjacentNode> adjacentTable = new HashMap<String, AdjacentNode>();
 

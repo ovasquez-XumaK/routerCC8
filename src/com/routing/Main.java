@@ -28,17 +28,16 @@ public class Main {
                     int adjacentCost = Integer.parseInt(tokens.nextToken());
                     AdjacentNode tempAdjacent = new AdjacentNode(adjacentName,adjacentIp,adjacentCost);
                     tableOfDistance.addAdjacent(adjacentName,tempAdjacent);
+                    ReachNode tempReachNode = new ReachNode(adjacentName,adjacentCost,tempAdjacent);
+                    tableOfDistance.addRoute(adjacentName,tempReachNode);
                 } catch (NumberFormatException e)
                 {
                     System.out.println("ERROR in adyacentes.txt.\n");
                 }
             }
+            System.out.println("Funciona hasta aqui");
             inFile.close();
-            //Start server Listener
-            ServerSocket serverSocket = new ServerSocket(9080);
-            ServerListener server = new ServerListener(serverSocket,tableOfDistance);
-            server.run();
-            //startClient threads
+
             //instance the servers client
             HashMap iterateTable = tableOfDistance.getAdjacentTable();
             Iterator iteratorTable = iterateTable.keySet().iterator();
@@ -48,6 +47,15 @@ public class Main {
                 clientDistanceVectorInstance.run();
                 threadOfClient.put(name,clientDistanceVectorInstance);
             }
+
+            //Start server Listener
+            ServerSocket serverSocket = new ServerSocket(9080);
+            ServerListener server = new ServerListener(serverSocket,tableOfDistance);
+            server.run();
+
+
+            //startClient threads
+
         } catch (IOException e) {
             e.printStackTrace();
         }

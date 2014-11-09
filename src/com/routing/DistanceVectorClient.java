@@ -27,7 +27,7 @@ public class DistanceVectorClient extends Thread {
     public DistanceVectorClient(String adjacentName, TableStructure table){
         adjacentNameGlobal = adjacentName;
         tableOfStructure = table;
-
+        adjacentReference = tableOfStructure.getAdjacent(adjacentName);
     }
 
     @Override
@@ -35,6 +35,7 @@ public class DistanceVectorClient extends Thread {
         while(true) {
             if(null == adjacentSocket) {
                 try {
+                    System.out.println(adjacentReference.getIP());
                     adjacentSocket = new Socket(InetAddress.getByName(adjacentReference.getIP()), 9080);
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
@@ -54,7 +55,7 @@ public class DistanceVectorClient extends Thread {
                     } else {
                         sendDVMessage(outputStream,true);
                     }
-                    Thread.sleep( 30000 );
+                    Thread.sleep( 3000 );
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -72,6 +73,7 @@ public class DistanceVectorClient extends Thread {
         Iterator keys = tableOfStructure.getTable().keySet().iterator();
         while(keys.hasNext()){
             String peerNameTemp = keys.next().toString();
+            System.out.println(">>>" + peerNameTemp);
             ReachNode nodeTemp = tableOfStructure.getRoute(peerNameTemp);
             bodyMessage = bodyMessage + peerNameTemp + ":" + nodeTemp.getCost() + "\n";
             numberOfLines += 1;
@@ -81,7 +83,7 @@ public class DistanceVectorClient extends Thread {
         message = message + "Len:" + numberOfLines + "\n";
         message = message + bodyMessage;
 
-        return bodyMessage;
+        return message;
     }
 
     public String buildKeepAlive(){
@@ -100,6 +102,7 @@ public class DistanceVectorClient extends Thread {
             String[] tokensInputMessage = inputMessage.split(":");
             if (tokensInputMessage[0].equals(valueFrom)) {
                 valueName = tokensInputMessage[1];
+                System.out.println(valueName);
             }
             if (valueName.equals(adjacentReference.getName())) {
                 tokensInputMessage = inputSream.readLine().split(":");
@@ -123,6 +126,7 @@ public class DistanceVectorClient extends Thread {
             outputStream.print(messageKeepAlive);
         } else {
             String messageToSend = buildDVMessage();
+            System.out.println(messageToSend);
             outputStream.print(messageToSend);
         }
     }
