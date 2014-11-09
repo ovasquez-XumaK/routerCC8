@@ -15,6 +15,7 @@ import java.util.Iterator;
 public class DistanceVectorClient extends Thread {
 
     private AdjacentNode adjacentReference;
+    private String adjacentNameGlobal;
     public Socket adjacentSocket;
     public TableStructure tableOfStructure;
     private static String valueFrom = "From";
@@ -23,8 +24,8 @@ public class DistanceVectorClient extends Thread {
     private boolean isFirstTime = true;
     private String valueName;
 
-    public DistanceVectorClient(AdjacentNode adjacent, TableStructure table){
-        adjacentReference = adjacent;
+    public DistanceVectorClient(String adjacentName, TableStructure table){
+        adjacentNameGlobal = adjacentName;
         tableOfStructure = table;
 
     }
@@ -42,11 +43,13 @@ public class DistanceVectorClient extends Thread {
                 }
             } else {
                 try{
+                    adjacentReference = tableOfStructure.getAdjacent(adjacentNameGlobal);
                     PrintWriter outputStream = new PrintWriter(this.adjacentSocket.getOutputStream(),true);
                     if(!converStarted){
                         BufferedReader inputSream = new BufferedReader(new InputStreamReader(this.adjacentSocket.getInputStream()));
                         startCommunication(inputSream,outputStream);
-                    } else if(isFirstTime) {
+                    } else if(isFirstTime || adjacentReference.isTableHasChenge()) {
+                        isFirstTime = false;
                         sendDVMessage(outputStream,false);
                     } else {
                         sendDVMessage(outputStream,true);

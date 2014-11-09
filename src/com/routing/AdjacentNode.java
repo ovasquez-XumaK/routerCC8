@@ -5,12 +5,14 @@ package com.routing;
 public class AdjacentNode {
     public String adjacentName = "";
     public String adjacentIP = "";
+    public boolean tableHasChange;
     public int adjacentCost = 0;
 
     public AdjacentNode(String name, String ip, int cost){
         adjacentName = name;
         adjacentIP = ip;
         adjacentCost = cost;
+        tableHasChange = true;
     }
 
     public String getIP(){
@@ -32,6 +34,12 @@ public class AdjacentNode {
     public void setCost(int cost){
         adjacentCost = cost;
     }
+
+    public void tableChange(){ tableHasChange = true;}
+
+    public void tableSend(){ tableHasChange = false;}
+
+    public boolean isTableHasChenge(){ return tableHasChange;}
 
 
 }

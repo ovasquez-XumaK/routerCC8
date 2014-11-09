@@ -9,11 +9,11 @@ import java.util.StringTokenizer;
 public class Main {
 
     public static TableStructure tableOfDistance = new TableStructure();
-
+    public static testing test = new testing();
     public static void main(String[] args) {
         try {
             System.out.println("Iniciando Router " + tableOfDistance.routerName);
-            BufferedReader inFile = new BufferedReader(new FileReader("adyacentes.txt"));
+            BufferedReader inFile = new BufferedReader(new FileReader("C:\\Users\\Jose\\IdeaProjects\\Routing\\src\\com\\routing\\adyacentes.txt"));
             String temp;
             while((temp = inFile.readLine()) != null){
                 try{

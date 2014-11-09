@@ -67,7 +67,9 @@ public class TableStructure {
     //Start distance vector methods
 
         public void addRoute(String name, ReachNode node){
+
             distanceVectorTable.put(name,node);
+            this.setChangeOnTable();
         }
 
         public void deleteRoute(String name){
@@ -80,6 +82,7 @@ public class TableStructure {
             tempRoute.setGate(tempAdjacent);
             tempRoute.setCost(cost);
             distanceVectorTable.replace(name,tempRoute);
+            this.setChangeOnTable();
         }
 
         public ReachNode getRoute(String name){
@@ -106,5 +109,13 @@ public class TableStructure {
 
     //Finish distance vector methods
 
-
+    //set change on table
+        public void setChangeOnTable(){
+            Iterator adjacentTableIterator = adjacentTable.keySet().iterator();
+            while(adjacentTableIterator.hasNext()){
+                String nameIterator = adjacentTableIterator.next().toString();
+                AdjacentNode iteratorNode = adjacentTable.get(nameIterator);
+                iteratorNode.tableChange();
+            }
+        }
 }
