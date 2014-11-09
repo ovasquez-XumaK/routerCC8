@@ -27,7 +27,7 @@ public class DistanceVectorClient extends Thread {
     public DistanceVectorClient(String adjacentName, TableStructure table){
         adjacentNameGlobal = adjacentName;
         tableOfStructure = table;
-
+        adjacentReference = tableOfStructure.getAdjacent(adjacentName);
     }
 
     @Override
