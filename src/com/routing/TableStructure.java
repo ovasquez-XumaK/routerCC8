@@ -62,6 +62,8 @@ public class TableStructure {
             return adjacentTable.containsKey(name);
         }
 
+        public HashMap getAdjacentTable(){return adjacentTable;}
+
     //Finish adjacent Methods
 
     //Start distance vector methods

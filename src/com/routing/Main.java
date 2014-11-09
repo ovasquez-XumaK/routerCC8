@@ -4,12 +4,16 @@ package com.routing;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 public class Main {
 
     public static TableStructure tableOfDistance = new TableStructure();
-    public static testing test = new testing();
+    public static HashMap<String,DistanceVectorClient> threadOfClient = new HashMap<String, DistanceVectorClient>();
     public static void main(String[] args) {
         try {
             System.out.println("Iniciando Router " + tableOfDistance.routerName);
@@ -28,9 +32,22 @@ public class Main {
                 {
                     System.out.println("ERROR in adyacentes.txt.\n");
                 }
-
             }
             inFile.close();
+            //Start server Listener
+            ServerSocket serverSocket = new ServerSocket(9080);
+            ServerListener server = new ServerListener(serverSocket,tableOfDistance);
+            server.run();
+            //startClient threads
+            //instance the servers client
+            HashMap iterateTable = tableOfDistance.getAdjacentTable();
+            Iterator iteratorTable = iterateTable.keySet().iterator();
+            while(iteratorTable.hasNext()){
+                String name = iteratorTable.next().toString();
+                DistanceVectorClient clientDistanceVectorInstance = new DistanceVectorClient(name,tableOfDistance);
+                clientDistanceVectorInstance.run();
+                threadOfClient.put(name,clientDistanceVectorInstance);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
