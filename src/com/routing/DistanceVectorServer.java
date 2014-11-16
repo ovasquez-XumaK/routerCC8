@@ -20,14 +20,15 @@ public class DistanceVectorServer implements Runnable {
 
     @Override
     public void run() {
+        BufferedReader lectura = null;
+        try{
+            lectura = new BufferedReader(new InputStreamReader(this.stablishConection.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while(true){
-            try {
-                BufferedReader lectura = new BufferedReader(new InputStreamReader(this.stablishConection.getInputStream()));
-                parseMessage(lectura);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            System.out.println("hola mundo");
+            parseMessage(lectura);
         }
     }
 
