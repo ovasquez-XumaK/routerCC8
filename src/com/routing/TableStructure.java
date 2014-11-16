@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 
 public class TableStructure {
-    public static String routerName = "Jose";
+    public static String routerName = "oscar";
     private HashMap<String,ReachNode> distanceVectorTable = new HashMap<String, ReachNode>();
     private HashMap<String,AdjacentNode> adjacentTable = new HashMap<String, AdjacentNode>();
 
@@ -26,7 +26,8 @@ public class TableStructure {
         }
 
         public void setAdjacent(String name,AdjacentNode adjacent){
-            adjacentTable.replace(name,adjacent);
+            adjacentTable.remove(name);
+            adjacentTable.put(name,adjacent);
         }
 
         public AdjacentNode getAdjacent(String name){
@@ -50,7 +51,7 @@ public class TableStructure {
             while(table.hasNext()){
                 String name = table.next().toString();
                 AdjacentNode tempCompare = adjacentTable.get(name);
-                if(tempCompare.getIP().equals(ip.toString())){
+                if(tempCompare.getIP().equals(ip.toString().substring(1,ip.toString().length()))){
                     return true;
                 }
             }
@@ -83,7 +84,8 @@ public class TableStructure {
             AdjacentNode tempAdjacent = getAdjacent(gate);
             tempRoute.setGate(tempAdjacent);
             tempRoute.setCost(cost);
-            distanceVectorTable.replace(name,tempRoute);
+            distanceVectorTable.remove(name);
+            distanceVectorTable.put(name,tempRoute);
             this.setChangeOnTable();
         }
 

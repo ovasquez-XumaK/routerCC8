@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             System.out.println("Iniciando Router " + tableOfDistance.routerName);
-            BufferedReader inFile = new BufferedReader(new FileReader("C:\\Users\\Jose\\IdeaProjects\\Routing\\src\\com\\routing\\adyacentes.txt"));
+            BufferedReader inFile = new BufferedReader(new FileReader("/home/jose/Escritorio/proyectoAlmostFinal/routerCC8/src/com/routing/adyacentes.txt"));
             String temp;
             while((temp = inFile.readLine()) != null){
                 try{
@@ -38,7 +38,6 @@ public class Main {
             ServerSocket serverSocket = new ServerSocket(9080);
             ServerListener server = new ServerListener(serverSocket,tableOfDistance);
             server.run();
-            //startClient threads
             //instance the servers client
             HashMap iterateTable = tableOfDistance.getAdjacentTable();
             Iterator iteratorTable = iterateTable.keySet().iterator();
@@ -48,6 +47,9 @@ public class Main {
                 clientDistanceVectorInstance.run();
                 threadOfClient.put(name,clientDistanceVectorInstance);
             }
+
+            //startClient threads
+
         } catch (IOException e) {
             e.printStackTrace();
         }
