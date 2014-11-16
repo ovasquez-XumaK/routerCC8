@@ -12,7 +12,7 @@ import java.util.Iterator;
 /**
  * Created by Jose on 05/11/2014.
  */
-public class DistanceVectorClient extends Thread {
+public class DistanceVectorClient implements Runnable{
 
     private AdjacentNode adjacentReference;
     private String adjacentNameGlobal;

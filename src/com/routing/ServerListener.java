@@ -24,8 +24,8 @@ public class ServerListener implements Runnable {
             try {
                 Socket conectionWait = stablishConection.accept();
                 if(tableOfStructure.containsAdjacent(conectionWait.getInetAddress())){
-                    DistanceVectorServer newConection = new DistanceVectorServer(tableOfStructure,conectionWait);
-                    newConection.run();
+                    Thread newThread = new Thread(new DistanceVectorServer(tableOfStructure,conectionWait));
+                    newThread.start();
                 } else {
                     System.out.println("Intento de conexión Router no Adyacent --> " + conectionWait.getInetAddress());
                 }

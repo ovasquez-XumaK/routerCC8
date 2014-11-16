@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
 public class Main {
 
     public static TableStructure tableOfDistance = new TableStructure();
-    public static HashMap<String,DistanceVectorClient> threadOfClient = new HashMap<String, DistanceVectorClient>();
+    public static HashMap<String,Thread> threadOfClient = new HashMap<String, Thread>();
     public static void main(String[] args) {
         try {
             System.out.println("Iniciando Router " + tableOfDistance.routerName);
@@ -43,9 +43,9 @@ public class Main {
             Iterator iteratorTable = iterateTable.keySet().iterator();
             while(iteratorTable.hasNext()){
                 String name = iteratorTable.next().toString();
-                DistanceVectorClient clientDistanceVectorInstance = new DistanceVectorClient(name,tableOfDistance);
-                clientDistanceVectorInstance.run();
-                threadOfClient.put(name,clientDistanceVectorInstance);
+                Thread newThread = new Thread(new DistanceVectorClient(name,tableOfDistance));
+                newThread.start();
+                threadOfClient.put(name,newThread);
             }
 
             //Start server Listener
