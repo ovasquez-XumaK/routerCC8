@@ -12,7 +12,7 @@ import java.util.Iterator;
 /**
  * Created by Jose on 05/11/2014.
  */
-public class DistanceVectorClient extends Thread {
+public class DistanceVectorClient implements Runnable{
 
     private AdjacentNode adjacentReference;
     private String adjacentNameGlobal;
@@ -35,11 +35,12 @@ public class DistanceVectorClient extends Thread {
         while(true) {
             if(null == adjacentSocket) {
                 try {
+                    System.out.println(adjacentReference.getIP());
                     adjacentSocket = new Socket(InetAddress.getByName(adjacentReference.getIP()), 9080);
                 } catch (UnknownHostException e) {
-                    e.printStackTrace();
+                    System.out.println();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println();
                 }
             } else {
                 try{
@@ -50,17 +51,17 @@ public class DistanceVectorClient extends Thread {
                         startCommunication(inputSream,outputStream);
                     } else if(isFirstTime || adjacentReference.isTableHasChenge()) {
                         isFirstTime = false;
+                        adjacentReference.tableHasChange = false;
                         sendDVMessage(outputStream,false);
                     } else {
                         sendDVMessage(outputStream,true);
                     }
-                    Thread.sleep( 30000 );
+                    Thread.sleep( 10000 );
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                //Agregar validaciones para enviar DV o KeepAlive
             }
         }
     }
@@ -72,6 +73,7 @@ public class DistanceVectorClient extends Thread {
         Iterator keys = tableOfStructure.getTable().keySet().iterator();
         while(keys.hasNext()){
             String peerNameTemp = keys.next().toString();
+            System.out.println(">>>" + peerNameTemp);
             ReachNode nodeTemp = tableOfStructure.getRoute(peerNameTemp);
             bodyMessage = bodyMessage + peerNameTemp + ":" + nodeTemp.getCost() + "\n";
             numberOfLines += 1;
@@ -81,7 +83,7 @@ public class DistanceVectorClient extends Thread {
         message = message + "Len:" + numberOfLines + "\n";
         message = message + bodyMessage;
 
-        return bodyMessage;
+        return message;
     }
 
     public String buildKeepAlive(){
@@ -108,7 +110,6 @@ public class DistanceVectorClient extends Thread {
                         converStarted = true;
                     }
                 }
-
             } else {
                 System.out.println("Authentication Failure expected:" + adjacentReference.getName() + " Found:" + valueName);
             }
@@ -120,10 +121,18 @@ public class DistanceVectorClient extends Thread {
     public void sendDVMessage(PrintWriter outputStream,boolean isKeepAlive){
         if(isKeepAlive){
             String messageKeepAlive = buildKeepAlive();
-            outputStream.print(messageKeepAlive);
+            outputStream.println(messageKeepAlive);
+            System.out.println("*************************");
+            System.out.println("     mensaje enviado     ");
+            System.out.println(messageKeepAlive);
+            System.out.println("*************************");
         } else {
             String messageToSend = buildDVMessage();
-            outputStream.print(messageToSend);
+            outputStream.println(messageToSend);
+            System.out.println("*************************");
+            System.out.println("     mensaje enviado     ");
+            System.out.println(messageToSend);
+            System.out.println("*************************");
         }
     }
 }
