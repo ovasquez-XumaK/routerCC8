@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 
 public class TableStructure {
-    public static String routerName = "jose";
+    public static String routerName = "oscar";
     private HashMap<String,ReachNode> distanceVectorTable = new HashMap<String, ReachNode>();
     private HashMap<String,AdjacentNode> adjacentTable = new HashMap<String, AdjacentNode>();
 
@@ -26,7 +26,8 @@ public class TableStructure {
         }
 
         public void setAdjacent(String name,AdjacentNode adjacent){
-            adjacentTable.replace(name,adjacent);
+            adjacentTable.remove(name);
+            adjacentTable.put(name,adjacent);
         }
 
         public AdjacentNode getAdjacent(String name){
@@ -38,10 +39,12 @@ public class TableStructure {
             while(table.hasNext()){
                 String name = table.next().toString();
                 AdjacentNode tempCompare = adjacentTable.get(name);
-                if(tempCompare.getIP().equals(ip.toString())){
+                if(tempCompare.getIP().equals(ip.toString().substring(1,ip.toString().length()))){
+                    System.out.println("lo encontre");
                     return tempCompare;
                 }
             }
+            System.out.println("No lo encontre");
             return null;
         }
 
@@ -50,7 +53,7 @@ public class TableStructure {
             while(table.hasNext()){
                 String name = table.next().toString();
                 AdjacentNode tempCompare = adjacentTable.get(name);
-                if(tempCompare.getIP().equals(ip.toString())){
+                if(tempCompare.getIP().equals(ip.toString().substring(1,ip.toString().length()))){
                     return true;
                 }
             }
@@ -69,7 +72,6 @@ public class TableStructure {
     //Start distance vector methods
 
         public void addRoute(String name, ReachNode node){
-
             distanceVectorTable.put(name,node);
             this.setChangeOnTable();
         }
@@ -83,7 +85,8 @@ public class TableStructure {
             AdjacentNode tempAdjacent = getAdjacent(gate);
             tempRoute.setGate(tempAdjacent);
             tempRoute.setCost(cost);
-            distanceVectorTable.replace(name,tempRoute);
+            distanceVectorTable.remove(name);
+            distanceVectorTable.put(name,tempRoute);
             this.setChangeOnTable();
         }
 
@@ -119,5 +122,17 @@ public class TableStructure {
                 AdjacentNode iteratorNode = adjacentTable.get(nameIterator);
                 iteratorNode.tableChange();
             }
+        }
+
+        public String toDisp(){
+            String result = "";
+            for(int i = 0; i < distanceVectorTable.size(); i++){
+                Iterator keys = distanceVectorTable.keySet().iterator();
+                while(keys.hasNext()){
+                    String name = keys.next().toString();
+                    result += " { " + name + " : "+ distanceVectorTable.get(name).getCost() + "} \n";
+                }
+            }
+            return result;
         }
 }

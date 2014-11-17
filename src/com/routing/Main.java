@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             System.out.println("Iniciando Router " + tableOfDistance.routerName);
-            BufferedReader inFile = new BufferedReader(new FileReader("C:\\Users\\Jose\\IdeaProjects\\Routing\\src\\com\\routing\\adyacentes.txt"));
+            BufferedReader inFile = new BufferedReader(new FileReader("/home/jose/Escritorio/proyectoAlmostFinal/routerCC8/src/com/routing/adyacentes.txt"));
             String temp;
             while((temp = inFile.readLine()) != null){
                 try{
@@ -28,7 +28,7 @@ public class Main {
                     int adjacentCost = Integer.parseInt(tokens.nextToken());
                     AdjacentNode tempAdjacent = new AdjacentNode(adjacentName,adjacentIp,adjacentCost);
                     tableOfDistance.addAdjacent(adjacentName,tempAdjacent);
-                    ReachNode tempReachNode = new ReachNode(adjacentName,adjacentCost,tempAdjacent);
+                    ReachNode tempReachNode = new ReachNode(adjacentName,0,tempAdjacent);
                     tableOfDistance.addRoute(adjacentName,tempReachNode);
                 } catch (NumberFormatException e)
                 {
@@ -50,8 +50,8 @@ public class Main {
 
             //Start server Listener
             ServerSocket serverSocket = new ServerSocket(9080);
-            ServerListener server = new ServerListener(serverSocket,tableOfDistance);
-            server.run();
+            Thread serverList = new Thread(new ServerListener(serverSocket,tableOfDistance));
+            serverList.start();
 
 
             //startClient threads
