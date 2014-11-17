@@ -27,7 +27,6 @@ public class DistanceVectorServer implements Runnable {
             e.printStackTrace();
         }
         while(true){
-            System.out.println("hola mundo");
             parseMessage(lectura);
         }
     }
@@ -40,6 +39,8 @@ public class DistanceVectorServer implements Runnable {
         int length = 0;
         try {
              messagePart = message.readLine();
+            System.out.println("******ServerReceive*******");
+            System.out.println(messagePart);
             messagePartSplit = messagePart.split(":");
             if(messagePartSplit[0].equals("From")){
                 adjacentName = messagePartSplit[1];
@@ -48,34 +49,42 @@ public class DistanceVectorServer implements Runnable {
             }
             if(tableOfStructure.containsAdjacent(adjacentName)){
                 messagePart = message.readLine();
+                System.out.println(messagePart);
                 if(messagePart.equals("Type:HELLO")){
                     sendHelloMessage();
                 } else if(messagePart.equals("Type:DV")) {
                     messagePart = message.readLine();
+                    System.out.println(messagePart);
                     messagePartSplit = messagePart.split(":");
                     if(messagePartSplit[0].equals("Len")){
                         length = Integer.parseInt(messagePartSplit[1]);
                         if(length > 0) {
                             for (int i = 0; i < length; i++) {
                                 messagePart = message.readLine();
+                                System.out.println(messagePart);
                                 messagePartSplit = messagePart.split(":");
                                 String tempName = messagePartSplit[0];
                                 int tempCost = Integer.parseInt(messagePartSplit[1]);
-                                if(tableOfStructure.containsRoute(tempName)){
-                                    if(tableOfStructure.isFaster(tempName,tempCost)){
-                                        tableOfStructure.setRoute(tempName,stablishConection.getInetAddress(),tempCost);
+                                if(!(tempName.equals(tableOfStructure.routerName))) {
+                                    if (tableOfStructure.containsRoute(tempName)) {
+                                        if (tableOfStructure.isFaster(tempName, tempCost)) {
+                                            tableOfStructure.setRoute(tempName, stablishConection.getInetAddress(), tempCost);
+                                        }
+                                    } else {
+                                        AdjacentNode tempAdjacent = tableOfStructure.getAdjacent(stablishConection.getInetAddress());
+                                        ReachNode tempReach = new ReachNode(tempName, tempCost, tempAdjacent);
+                                        tableOfStructure.addRoute(tempName, tempReach);
                                     }
-                                } else {
-                                    AdjacentNode tempAdjacent = tableOfStructure.getAdjacent(stablishConection.getInetAddress());
-                                    ReachNode tempReach = new ReachNode(tempName,tempCost,tempAdjacent);
-                                    tableOfStructure.addRoute(tempName,tempReach);
                                 }
                             }
+                            System.out.println("********ServerEnd*********");
                         } else {
                             System.out.println("Algoritmo con Type:DV y length = 0");
                         }
                     }
                 } else if(messagePart.equals("Type:KeepAlive")){
+                    System.out.println(tableOfStructure.toDisp());
+                    System.out.println("********ServerEnd*********");
                     flagKeepAlive = true;
                 } else {
                     System.out.println("Algoritmo erroneo --> " + messagePart);
@@ -86,7 +95,7 @@ public class DistanceVectorServer implements Runnable {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println();
         }
     }
 
