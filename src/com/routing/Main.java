@@ -21,7 +21,6 @@ public class Main {
             String temp;
             while((temp = inFile.readLine()) != null){
                 try{
-                    System.out.println("Adyacente : " + temp);
                     StringTokenizer tokens = new StringTokenizer(temp,",");
                     String adjacentName = tokens.nextToken();
                     String adjacentIp = tokens.nextToken();
@@ -35,7 +34,6 @@ public class Main {
                     System.out.println("ERROR in adyacentes.txt.\n");
                 }
             }
-            System.out.println("Funciona hasta aqui");
             inFile.close();
 
             //instance the servers client

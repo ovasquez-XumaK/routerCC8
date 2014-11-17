@@ -51,6 +51,7 @@ public class DistanceVectorServer implements Runnable {
                 messagePart = message.readLine();
                 System.out.println(messagePart);
                 if(messagePart.equals("Type:HELLO")){
+                    System.out.println("********ServerEnd*********");
                     sendHelloMessage();
                 } else if(messagePart.equals("Type:DV")) {
                     messagePart = message.readLine();

@@ -73,7 +73,6 @@ public class DistanceVectorClient implements Runnable{
         Iterator keys = tableOfStructure.getTable().keySet().iterator();
         while(keys.hasNext()){
             String peerNameTemp = keys.next().toString();
-            System.out.println(">>>" + peerNameTemp);
             ReachNode nodeTemp = tableOfStructure.getRoute(peerNameTemp);
             bodyMessage = bodyMessage + peerNameTemp + ":" + nodeTemp.getCost() + "\n";
             numberOfLines += 1;
