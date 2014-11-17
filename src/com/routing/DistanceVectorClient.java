@@ -35,32 +35,36 @@ public class DistanceVectorClient implements Runnable{
         while(true) {
             if(null == adjacentSocket) {
                 try {
-                    System.out.println(adjacentReference.getIP());
                     adjacentSocket = new Socket(InetAddress.getByName(adjacentReference.getIP()), 9080);
+                    tableOfStructure.threadIsAlive.put(adjacentReference.getName(), "true");
                 } catch (UnknownHostException e) {
-                    System.out.println();
+                    adjacentSocket = null;
                 } catch (IOException e) {
-                    System.out.println();
+                    adjacentSocket = null;
                 }
             } else {
-                try{
+                try {
                     adjacentReference = tableOfStructure.getAdjacent(adjacentNameGlobal);
-                    PrintWriter outputStream = new PrintWriter(this.adjacentSocket.getOutputStream(),true);
-                    if(!converStarted){
+                    PrintWriter outputStream = new PrintWriter(this.adjacentSocket.getOutputStream(), true);
+                    if (!converStarted) {
                         BufferedReader inputSream = new BufferedReader(new InputStreamReader(this.adjacentSocket.getInputStream()));
-                        startCommunication(inputSream,outputStream);
-                    } else if(isFirstTime || adjacentReference.isTableHasChenge()) {
+                        startCommunication(inputSream, outputStream);
+                    } else if (isFirstTime || adjacentReference.isTableHasChenge()) {
                         isFirstTime = false;
                         adjacentReference.tableHasChange = false;
-                        sendDVMessage(outputStream,false);
-                    } else {
+                        sendDVMessage(outputStream, false);
+                    }else if(tableOfStructure.threadIsAlive.get(adjacentReference.getName()).equals("false")){
+                        converStarted = false;
+                        isFirstTime = true;
+                        adjacentSocket = null;
+                    }else {
                         sendDVMessage(outputStream,true);
                     }
                     Thread.sleep( 10000 );
                 } catch (IOException e) {
-                    e.printStackTrace();
+                   adjacentSocket = null;
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    adjacentSocket = null;
                 }
             }
         }
@@ -113,7 +117,7 @@ public class DistanceVectorClient implements Runnable{
                 System.out.println("Authentication Failure expected:" + adjacentReference.getName() + " Found:" + valueName);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            adjacentSocket = null;
         }
     }
 

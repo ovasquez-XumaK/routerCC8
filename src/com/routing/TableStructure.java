@@ -11,9 +11,10 @@ import java.util.Iterator;
 
 
 public class TableStructure {
-    public static String routerName = "oscar";
+    public static String routerName = "jose";
     private HashMap<String,ReachNode> distanceVectorTable = new HashMap<String, ReachNode>();
     private HashMap<String,AdjacentNode> adjacentTable = new HashMap<String, AdjacentNode>();
+    public HashMap<String,String> threadIsAlive = new HashMap<String, String>();
 
     //Start adjacent Methods
 
@@ -40,11 +41,9 @@ public class TableStructure {
                 String name = table.next().toString();
                 AdjacentNode tempCompare = adjacentTable.get(name);
                 if(tempCompare.getIP().equals(ip.toString().substring(1,ip.toString().length()))){
-                    System.out.println("lo encontre");
                     return tempCompare;
                 }
             }
-            System.out.println("No lo encontre");
             return null;
         }
 

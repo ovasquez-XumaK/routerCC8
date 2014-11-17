@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -11,11 +13,14 @@ import java.net.Socket;
  */
 public class DistanceVectorServer implements Runnable {
     TableStructure tableOfStructure;
+    ServerSocket reconect;
     Socket stablishConection;
+    public static InetAddress address;
 
     public DistanceVectorServer(TableStructure table,Socket socket ){
         tableOfStructure = table;
         stablishConection = socket;
+        address = stablishConection.getInetAddress();
     }
 
     @Override
@@ -27,7 +32,18 @@ public class DistanceVectorServer implements Runnable {
             e.printStackTrace();
         }
         while(true){
-            parseMessage(lectura);
+            if((!stablishConection.isClosed()) && (null != stablishConection)) {
+                parseMessage(lectura);
+            } else {
+                try {
+                    stablishConection = reconect.accept();
+                    if(stablishConection.getInetAddress() != address){
+                        stablishConection = null;
+                    }
+                } catch (IOException e) {
+                    stablishConection = null;
+                }
+            }
         }
     }
 
@@ -96,7 +112,7 @@ public class DistanceVectorServer implements Runnable {
 
 
         } catch (IOException e) {
-            System.out.println();
+
         }
     }
 
@@ -108,7 +124,7 @@ public class DistanceVectorServer implements Runnable {
             PrintWriter escritura = new PrintWriter(this.stablishConection.getOutputStream(), true);
             escritura.println(message);
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
     }
 }

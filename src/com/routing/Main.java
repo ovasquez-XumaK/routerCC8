@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             System.out.println("Iniciando Router " + tableOfDistance.routerName);
-            BufferedReader inFile = new BufferedReader(new FileReader("/home/jose/Escritorio/proyectoAlmostFinal/routerCC8/src/com/routing/adyacentes.txt"));
+            BufferedReader inFile = new BufferedReader(new FileReader("C:\\Users\\Jose\\Desktop\\proyectoFinalCC8\\routerCC8\\src\\com\\routing\\adyacentes.txt"));
             String temp;
             while((temp = inFile.readLine()) != null){
                 try{
